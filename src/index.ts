@@ -1,30 +1,17 @@
 import { Elysia } from "elysia";
 
+import { setupPostRoutes } from "./routes/post.route";
+// import db class : 
+
+import BunDatabase from "./database/db";
+
 const app = new Elysia();
+// setup db : 
+app.decorate('db', new BunDatabase());
 
 
-// define routes : 
-
-
-app.get(
-  "/api/ping",
-  (context) =>{
-    console.log("\n");
-    return {"message":"Ping Pong alysia alive "}
-  });
-
-app.post(
-  "/api/post",
-  (context) =>{
-    const { body } = context;
-    console.log(body);
-    return {
-      "message":" post it by alisya post ",
-      "body": body
-    }
-    ;
-  }
-);
+// setup Ping tester : 
+  app.use(setupPostRoutes);
 
 
   app.listen("3000",()=>{
