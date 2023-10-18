@@ -32,6 +32,42 @@ export const AddPost = async (context:Context)=>{
     }
 };
 
+// add a get method to fetch all post with the same author : 
+export const getPostByAuthor = async (context:Context):Promise<IPost[]>=>{
+    const { query } = context;
+    // extract data from the query : 
+    const author:string = String(query.author);
+    if ( !author){
+        throw new Error("Author is required ");
+    }
+    try{
+        // try to get all the posts related to this author: 
+        const resultFetch = await DbInstance.getPostListByAuthor(author);
+        return resultFetch;
+    }catch( error ){
+        console.log( error );
+        throw new Error("Failed to get post list");
+    };
+}
+
+
+export const deletePost = async ( context:Context )=>{
+    // extract the post target id from params : 
+    const { postId } = context.params;
+    try{
+        const deletedItem = await DbInstance.deletePostById( postId );
+        return {
+            "message":"Post deleted successufully "
+        };
+    }catch( error ){
+        console.log( error );
+        throw new Error("Failed to delete post");
+    }
+}
+
+
+
+
 export const GetPost = async (context:Context):Promise<IPost>=>{
     // extract params from context : 
     const { postId } = context.params;
