@@ -6,21 +6,29 @@ import DbInstance from "../database/db";
 import IPost from "../interfaces/post.interface";
 
 
-export const AddPost = (context:Context)=>{
+export const AddPost = async (context:Context)=>{
     // extract the body from the context object : 
-    const { body } = context;
+    const { body }:IPost = context;
 
     if ( !body?.title || !body?.author ){
         throw new Error(" Title and author cannot be empty ");
     }
-    try{
-        const data:IPost = DbInstance.addNewPost(body);
+    const alreadyPosted = await DbInstance.alreadyPosted(body);
+    if ( alreadyPosted ){
+        try{
+            // check it the post is already posted:
+            const data:IPost = DbInstance.addNewPost(body);
+            return {
+                "message": "Post created successfully"
+            }; 
+        }catch( error ){
+            console.log(error);
+            throw new Error("Failed to add post ");
+        }
+    }else{
         return {
-            "message": "Post created successfully"
+            "message": "Post already exist "
         }; 
-    }catch( error ){
-        console.log(error);
-        throw new Error("Failed to add post ");
     }
 };
 
