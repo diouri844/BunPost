@@ -32,10 +32,21 @@ class BunDatabase {
         console.log( resultQuery );
         return resultQuery === null
     };
+    async getPostListByAuthor(author: string):Promise<IPost[]>{
+        const resultQuery:IPost[] = [];
+        const fetched = this.db.query('SELECT * FROM posts WHERE author = ?')
+        .all(author);
+        fetched.forEach( (post) => resultQuery.push(post));
+        return resultQuery;
+    }
     async  getPostById(id: number){
         const result = this.db.query(`Select * from posts WHERE id=${id}`).values()[0];
         return result;
         
+    }
+    async deletePostById(id: number): Promise<void>{
+        const result = this.db.query('Delete from posts WHERE id= ?').get(id);
+        return;
     }
     async addNewPost(PostPayload:IPost){
         const { title, author } = PostPayload;
