@@ -21,7 +21,17 @@ class BunDatabase {
     async getPosts():Promise<IPost[]> {
         const result:IPost[] = this.db.query('SELECT * FROM posts').all();
         return result;
-    }
+    };
+    async alreadyPosted(PostPayload:IPost):Promise<Boolean> {
+         // try to get the post by title
+        const { title, author } = PostPayload; 
+        const resultQuery = this.db.query(
+            'SELECT * FROM posts WHERE title = ? AND author = ?' 
+            )
+            .get(title,author);
+        console.log( resultQuery );
+        return resultQuery === null
+    };
     async  getPostById(id: number){
         const result = this.db.query(`Select * from posts WHERE id=${id}`).values()[0];
         return result;
