@@ -69,8 +69,6 @@ export const deletePost = async ( context:Context )=>{
 }
 
 
-
-
 export const GetPost = async (context:Context):Promise<IPost|void>=>{
     // extract params from context : 
     const { postId } = context.params;
