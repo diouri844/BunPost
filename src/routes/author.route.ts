@@ -1,5 +1,6 @@
 import { Elysia, Context } from "elysia";
 import AuthorProvider from "../models/Author.model";
+import IAuthor from "../interfaces/author.interface";
 
 const PREFIXER:string = "/api/author";
 
@@ -19,12 +20,11 @@ export default class AuthorRoutes {
     // Add more user-related routes as needed
   }
 
-  private getAuthor() {
+  private async getAuthor():Promise<{data:IAuthor[]}> {
     // extract id from context parameter:
         // try the static get method :
-        const result = AuthorProvider.getAuthorById(1);
-        console.log(result);
-        return;
+        const result:IAuthor[] = await AuthorProvider.getAuthorList();
+        return {"data":result};
     }
 
   private getAuthorPosts() {
@@ -35,8 +35,12 @@ export default class AuthorRoutes {
     // Your implementation for the /api/author POST route
   }
 
-  private getAuthorById() {
+  private async getAuthorById( context:Context):Promise<{data:IAuthor|String}> {
     // Your implementation for the /api/author/:authorId GET route
+    // extract the id from the request context : 
+    const { authorId } = context.params;
+    const result = await AuthorProvider.getAuthorById(String(authorId));
+    return {"data":result};
   }
 
   private deleteAuthor() {
