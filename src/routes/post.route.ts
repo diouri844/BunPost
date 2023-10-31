@@ -9,8 +9,5 @@ export function setupPostRoutes(app: Elysia) {
   app.post("/api/posts", AddPost);
   app.get("/api/post/:postId", GetPost);
   app.delete("/api/post/:postId", deletePost);
-
-
-
   // Add more user-related routes as needed
 }
