@@ -1,10 +1,9 @@
-import Database from "bun:sqlite";
 import { Context } from "elysia";
 
 // define the post controller as callback function:
-import DbInstance from "../database/db";
 import IPost from "../interfaces/post.interface";
-
+import PostModel from "../models/Post.model";
+import { Condition } from "burm";
 
 export const AddPost = async (context:Context)=>{
     // extract the body from the context object : 
@@ -13,11 +12,15 @@ export const AddPost = async (context:Context)=>{
     if ( !body?.title || !body?.author ){
         throw new Error(" Title and author cannot be empty ");
     }
-    const alreadyPosted = await DbInstance.alreadyPosted(body);
-    if ( alreadyPosted ){
+    const alreadyPosted = PostModel.findOne(
+        {
+            where: Condition.equals("title",body.title),
+        }
+        );
+        return alreadyPosted;
+    /*if ( alreadyPosted ){
         try{
-            // check it the post is already posted:
-            const data:IPost = DbInstance.addNewPost(body);
+            
             return {
                 "message": "Post created successfully"
             }; 
@@ -29,12 +32,12 @@ export const AddPost = async (context:Context)=>{
         return {
             "message": "Post already exist "
         }; 
-    }
+    }*/
 };
 
 // add a get method to fetch all post with the same author : 
-export const getPostByAuthor = async (context:Context):Promise<IPost[]>=>{
-    const { query } = context;
+export const getPostByAuthor = async (context:Context):Promise<IPost[]|void>=>{
+    /*const { query } = context;
     // extract data from the query : 
     const author:string = String(query.author);
     if ( !author){
@@ -47,13 +50,13 @@ export const getPostByAuthor = async (context:Context):Promise<IPost[]>=>{
     }catch( error ){
         console.log( error );
         throw new Error("Failed to get post list");
-    };
+    };*/
 }
 
 
 export const deletePost = async ( context:Context )=>{
     // extract the post target id from params : 
-    const { postId } = context.params;
+    /*const { postId } = context.params;
     try{
         const deletedItem = await DbInstance.deletePostById( postId );
         return {
@@ -62,17 +65,17 @@ export const deletePost = async ( context:Context )=>{
     }catch( error ){
         console.log( error );
         throw new Error("Failed to delete post");
-    }
+    }*/
 }
 
 
 
 
-export const GetPost = async (context:Context):Promise<IPost>=>{
+export const GetPost = async (context:Context):Promise<IPost|void>=>{
     // extract params from context : 
     const { postId } = context.params;
     // get the post id from the params :
-    try{
+    /*try{
         const data = await DbInstance.getPostById(postId);
         const PostResult:IPost = {
             id: Number(data[0]),
@@ -84,12 +87,12 @@ export const GetPost = async (context:Context):Promise<IPost>=>{
         console.log( error );
         throw new Error ("Failed to retrive post ");
         
-    }
+    }*/
 };
 
 
-export const GetPostList = async (context:Context):Promise<IPost[]>=>{
-    try{
+export const GetPostList = async (context:Context):Promise<IPost[]|void>=>{
+    /*try{
         const postList =  await DbInstance.getPosts();
         let result:IPost[] = [];
         postList.forEach( (post) => result.push( post ));
@@ -97,5 +100,5 @@ export const GetPostList = async (context:Context):Promise<IPost[]>=>{
     }catch( error ){
         console.log(error);
         throw new Error("Faild to get post list");
-    }
+    }*/
 };
