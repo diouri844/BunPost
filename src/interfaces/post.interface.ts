@@ -4,6 +4,6 @@
 export default interface IPost {
     id?: number;
     content: string;
-    title: string;
-    authorId: number;
+    type: string;
+    author: string;
 };
