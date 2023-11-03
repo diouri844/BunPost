@@ -1,8 +1,10 @@
 // import database istance :
 import myDbInstance from "../database/setupDb";
+import IauthorPayload from "../interfaces/author.dto";
 
 // import post interface: 
 import IAuthor from "../interfaces/author.interface";
+import IPost from "../interfaces/post.interface";
 // define my Author class provider :
 
 class AuthorProvider{
@@ -38,10 +40,38 @@ class AuthorProvider{
             }
         );
         return authorList;
+    };
+
+    static async getAuthorPosts(authorId:string):Promise<IPost[]>{
+        const fetchResult = myDbInstance
+        .getDb()
+        .prepare(
+            "Select * from post where author= ? "
+        ).all(authorId);
+        // print it : 
+        //console.log( fetchResult);
+        const postList:IPost[] = fetchResult;
+        return postList;
+    };
+
+    static async createNewAuthor(authorPayload:IauthorPayload):Promise<any>{
+        // prepar the databse query :
+        try{
+            const {publicName, fullName, contact } = authorPayload;
+            myDbInstance.getDb().
+            prepare(
+                "Insert into Author Values (Null,?,?,?)"
+            ).
+            run(
+                publicName,fullName,contact
+            );
+            const lastInsertId = myDbInstance.getDb().query('SELECT last_insert_rowid() as id').values()[0][0];
+            return lastInsertId;
+        }catch( error ){
+            console.error(error);
+            throw new Error("Failed to insert Author ");
+        }
     }
-
-
 } 
-
 
 export default AuthorProvider;
