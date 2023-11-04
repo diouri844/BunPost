@@ -54,7 +54,7 @@ class AuthorProvider{
         return postList;
     };
 
-    static async createNewAuthor(authorPayload:IauthorPayload):Promise<any>{
+    static async createNewAuthor(authorPayload:IauthorPayload):Promise<string | number | bigint | boolean | Uint8Array>{
         // prepar the databse query :
         try{
             const {publicName, fullName, contact } = authorPayload;
@@ -71,7 +71,27 @@ class AuthorProvider{
             console.error(error);
             throw new Error("Failed to insert Author ");
         }
-    }
+    };
+
+    static async deleteAuthor(authorId: string): Promise<string>{
+        // try to delete the author from the database by the id and its all associated posts:
+        try {
+            myDbInstance.getDb().
+            prepare(
+                "DELETE FROM author WHERE id = ?"
+            ).run(authorId);
+            // after deleting the author , try to delete the author posts : 
+            myDbInstance.getDb().prepare(
+                "Delete from Post where author = ?"
+            ).run(authorId);
+            return authorId;
+        }catch( error ) {
+            console.log ( error );
+            throw new Error("Failed to delete Author / posts");
+        }
+    };
+
+
 } 
 
 export default AuthorProvider;
