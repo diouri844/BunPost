@@ -16,11 +16,10 @@ class AuthorProvider{
             'SELECT * FROM Author WHERE id = ?',
         ).get(authorId);
         if ( !fetchResult ){
-            author = "Not found";
+            return "Not found";
         }else{
-            author = fetchResult;
+            return fetchResult as IAuthor;
         }
-        return author;
     };
 
     static async getAuthorList(): Promise<IAuthor[]>{
