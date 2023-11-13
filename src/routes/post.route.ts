@@ -1,13 +1,25 @@
-import { Elysia, Context } from "elysia";
+import { Elysia } from "elysia";
 
-// import controllers : 
-import { AddPost, GetPost, GetPostList, deletePost, getPostByAuthor } from "../controller/post.controller";
+import PostController from "../controller/post.controller";
 
-export function setupPostRoutes(app: Elysia) {
-  app.get("/api/posts", GetPostList);
-  app.get("/api/posts/author",getPostByAuthor);
-  app.post("/api/posts", AddPost);
-  app.get("/api/post/:postId", GetPost);
-  app.delete("/api/post/:postId", deletePost);
-  // Add more user-related routes as needed
+
+
+const PREFIXER:string = "/api/post";
+
+
+export default class PostRoutes {
+  private app;
+  constructor( app: Elysia ){
+    this.app = app;
+    this.setupRoutes();
+  }
+  private setupRoutes(): void{
+    const PostProvider = new PostController();
+    this.app.get(PREFIXER, PostProvider.getPostList);
+    this.app.get(PREFIXER+"/author",()=>{});
+    this.app.post(PREFIXER, ()=>{});
+    this.app.get(PREFIXER+"/:postId", ()=>{});
+    this.app.delete(PREFIXER+"/:postId", ()=>{});
+    return;
+  };
 }
