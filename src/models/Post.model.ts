@@ -6,7 +6,13 @@ import myDbInstance from "../database/setupDb";
 
 export default class PostProvider {
     static async getPostById(postId: string): Promise<IPost|string>{
-        return "";
+        const target = await myDbInstance.getDb().
+        query("SELECT * FROM Post WHERE id = ?").get(postId);
+        console.log(target);
+        if(!target){
+            return "Not found";
+        }
+        return target as IPost;
     };
     static async getPostList():Promise<IPost[]>{
         let postList:IPost[] = [];
@@ -14,7 +20,6 @@ export default class PostProvider {
             "SELECT * FROM Post"
         ).values();
         // cast data : 
-        console.log( fetchresult );
         fetchresult.forEach(
             item=>{
                 const post:IPost = {
