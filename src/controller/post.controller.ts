@@ -28,9 +28,9 @@ export default class PostController{
         };
         return target;
     };
-    async getPostList(context:Context):Promise<IPost[]>{
-        let authorPostList:IPost[] = [];
-        return authorPostList;
+    async getPostList():Promise<IPost[]>{
+        const result:IPost[] = await PostProvider.getPostList();
+        return result;
     };
     async deletePost(context:Context):Promise<string>{
         return "";
