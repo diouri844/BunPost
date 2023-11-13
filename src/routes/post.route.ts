@@ -18,7 +18,7 @@ export default class PostRoutes {
     this.app.get(PREFIXER, PostProvider.getPostList);
     this.app.get(PREFIXER+"/author",()=>{});
     this.app.post(PREFIXER, ()=>{});
-    this.app.get(PREFIXER+"/:postId", ()=>{});
+    this.app.get(PREFIXER+"/:postId", PostProvider.getPostById);
     this.app.delete(PREFIXER+"/:postId", ()=>{});
     return;
   };
