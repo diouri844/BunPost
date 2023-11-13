@@ -1,11 +1,11 @@
-import { Elysia, Context } from "elysia";
-import AuthorProvider from "../models/Author.model";
-import IAuthor from "../interfaces/author.interface";
-import IPost from "../interfaces/post.interface";
-import IauthorPayload from "../interfaces/author.dto";
-import AuthorController from "../controller/ahuthor.controller";
+import { Elysia } from "elysia";
+
+import AuthorController from "../controller/author.controller";
+
 
 const PREFIXER:string = "/api/author";
+
+
 
 export default class AuthorRoutes {
   private app;
@@ -21,7 +21,6 @@ export default class AuthorRoutes {
     this.app.post(PREFIXER, authorProvider.createAuthor);
     this.app.get(PREFIXER+"/:authorId", authorProvider.getAuthorById);
     this.app.delete(PREFIXER+"/:authorId", authorProvider.deleteAuthor);
-  }
-
+  };
 }
 
