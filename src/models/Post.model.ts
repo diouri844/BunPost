@@ -32,7 +32,20 @@ export default class PostProvider {
             }
         );
         return postList;
-    }
+    };
+    static async getAuthorPostList(authorId:string):Promise<IPost[]> {
+        let postList:IPost[] = [];
+        // get data  from the database :
+        const fetchResult = await myDbInstance.getDb().prepare(
+            "SELECT * FROM Post WHERE author = ?"
+        ).all(authorId);
+        fetchResult.forEach(
+            item => {
+                postList.push(item as IPost);
+            }
+        );
+        return postList;
+    };
 
 }
 
