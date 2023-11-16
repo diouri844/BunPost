@@ -14,6 +14,27 @@ export default class PostProvider {
         }
         return target as IPost;
     };
+    static async createPost(authorId:string,content:string,type:string):Promise<string | number >{
+        // instert the new post : 
+        try{
+            myDbInstance.getDb()
+            .prepare(
+                "Insert into Post Values (Null,?,?,?)"
+            ).run(
+                content,type,authorId
+            );
+            // inserted successfully: 
+            const lastInsertId = myDbInstance.getDb().query('SELECT last_insert_rowid() as id').values()[0][0];
+            return Number(lastInsertId);
+        }catch( error ){
+            console.error(error);
+            return "Failed to insert Author ";
+        }
+    } 
+
+
+
+
     static async getPostList():Promise<IPost[]>{
         let postList:IPost[] = [];
         const fetchresult = await myDbInstance.getDb().query(
@@ -47,6 +68,18 @@ export default class PostProvider {
         return postList;
     };
 
+    static async deletePost(postId: string): Promise<boolean> {
+        // delete th epost : 
+        try{
+            myDbInstance.getDb().prepare(
+            "DELETE FROM Post WHERE id = ?").
+            run(postId)
+            return true;
+        }catch( error ){
+            console.log(error);
+            return false
+        }
+    }
 }
 
 
