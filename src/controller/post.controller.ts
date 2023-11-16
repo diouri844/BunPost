@@ -13,13 +13,9 @@ export default class PostController{
         let response:{message:String, data: IPost} = {message: "", data: {
             content: "",
             type: "",
-            author: ""
+            author: "",
+            id: 0
         }};
-        const createdPost:IPost = {
-            content: "",
-            type: "",
-            author: ""
-        };
         // extract the author id form the context params :
         const { authorId } = context.params;
         // check if the author is existing : 
@@ -40,10 +36,22 @@ export default class PostController{
             response.message = "Type required";
             return response;
         }
-        response.data.content = payload.content;
-        response.data.author = String(authorId);
-        response.data.type = type;
-        return response;
+        const responseCreate:string|number = await PostProvider.createPost(
+            authorId,payload.content,type
+        );
+        // check the type of the response : 
+        if (  typeof responseCreate === "string"){
+            response.message = responseCreate;
+            return response;
+        }
+        if ( typeof responseCreate === "number" ){
+            response.message = "Post created successfully";
+            response.data.content = payload.content;
+            response.data.author = String(authorId);
+            response.data.type = type;
+            response.data.id = responseCreate;
+            return response;
+        }
     };
     async getPostByAuthor(context:Context):Promise<{message:String, data: IPost[]}>{
         let response:{message:String, data: IPost[]} = {message: "", data: []};
@@ -62,7 +70,6 @@ export default class PostController{
     async getPostById(context:Context){
         // extract postid from request context : 
         const { postId } = context.params;
-        console.log(postId);
         const fetchResult:IPost|string = await PostProvider.getPostById(String(postId));
         return ({ data: fetchResult});
     };
@@ -70,8 +77,18 @@ export default class PostController{
         const result:IPost[] = await PostProvider.getPostList();
         return result;
     };
-    async deletePost(context:Context):Promise<string>{
-        return "";
+    async deletePost(context:Context):Promise<{message:string, data:string}>{
+        let respone:{message:string, data:string} = {message:"", data:""}
+        // extract the post id  from the context : 
+        const {postId} = context.params;
+        // delete the post if is exist :
+        const deletState:boolean = await PostProvider.deletePost(String(postId));
+        if(!deletState){
+            respone.message = " Failed to deleted post";
+            return respone;
+        }
+        respone.message = " Post deleted successfully";
+        respone.data = postId;
+        return respone;
     }
-
 }
