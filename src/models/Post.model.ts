@@ -32,9 +32,6 @@ export default class PostProvider {
         }
     } 
 
-
-
-
     static async getPostList():Promise<IPost[]>{
         let postList:IPost[] = [];
         const fetchresult = await myDbInstance.getDb().query(
