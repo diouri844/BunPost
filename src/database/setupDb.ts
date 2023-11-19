@@ -24,6 +24,7 @@ class DatabaseProvider {
     async init():Promise<void>{
       await this.initPost();
       await this.initAuthor();
+      await this.initModeration();
       return;
     }
     async initPost() {
@@ -37,6 +38,20 @@ class DatabaseProvider {
         )'
       );
     }
+    // add the moderation table :
+    async initModeration(){
+      return this.db.run(
+        'CREATE TABLE IF NOT EXISTS "Moderation" (\
+          "id"	INTEGER NOT NULL UNIQUE,\
+          "postId"	INTEGER NOT NULL,\
+          "authorId"	INTEGER NOT NULL,\
+          "improved"	INTEGER NOT NULL,\
+          "published"	INTEGER NOT NULL,\
+          PRIMARY KEY("id" AUTOINCREMENT)\
+        );'
+      )
+    };
+
     async initAuthor() {
       return this.db.run(
         'CREATE TABLE IF NOT EXISTS "Author" (\
