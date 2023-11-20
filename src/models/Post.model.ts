@@ -8,7 +8,6 @@ export default class PostProvider {
     static async getPostById(postId: string): Promise<IPost|string>{
         const target = await myDbInstance.getDb().
         query("SELECT * FROM Post WHERE id = ?").get(postId);
-        console.log(target);
         if(!target){
             return "Not found";
         }
