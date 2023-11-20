@@ -11,14 +11,17 @@ export default class ModerationRoutes {
         this.app = app;
         this.setupRoutes();
     }
-    private setupRoutes():void{
+    private setupRoutes(){
         // setup an instance for the controller : 
         const ModerateProvider = new ModerationController();
+        this.app.get(PREFIXER,()=>{ return "Moderate Ping";});
         this.app.get(
-            PREFIXER+"/Moderate/<moderate_id>/<state>", 
+            PREFIXER+"/Improve/:moderate_id", 
             ModerateProvider.ModeratePost
         );
-        this.app.get(PREFIXER+"/author/:authorId",()=>{});
+        this.app.get(PREFIXER+"/author/:authorId",
+            ()=>{}
+        );
         this.app.get(PREFIXER+"/:postId", ()=>{});
         return;
     }
