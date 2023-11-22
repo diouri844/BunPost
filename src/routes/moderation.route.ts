@@ -19,6 +19,22 @@ export default class ModerationRoutes {
             PREFIXER+"/Improve/:moderate_id", 
             ModerateProvider.ModeratePost
         );
+        this.app.get(
+            PREFIXER+"/Unimprovement/:moderate_id",
+            ModerateProvider.DemoderatePost
+        );
+        this.app.get(
+            PREFIXER+"/Publish/:moderate_id",
+            ModerateProvider.PublishPost
+        );
+        this.app.get(
+            PREFIXER+"/Unpublish/:moderate_id",
+            ModerateProvider.UnPublishPost
+        );
+        this.app.delete(
+            PREFIXER+"/:moderate_id",
+            ModerateProvider.DeleteModerate
+        );
         this.app.get(PREFIXER+"/author/:authorId",
             ()=>{}
         );
