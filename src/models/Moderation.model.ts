@@ -23,7 +23,7 @@ export default class ModerateProvider {
             await myDbInstance.getDb().prepare(
                 "UPDATE Moderation\
                 SET improved = 1\
-                WHERE postId = ?\
+                WHERE id = ?\
                 "
             ).run(moderate_id);
             // fetch over the updated moderation:
@@ -35,5 +35,75 @@ export default class ModerateProvider {
             console.log( error );
             return "Can not Update State ";
         }
-    }
+    };
+    static async UnimprovePost( moderate_id: string):
+    Promise<IModerate|string> {
+        try{
+            await myDbInstance.getDb().prepare(
+                "UPDATE Moderation\
+                SET improved = 0\
+                WHERE id = ?\
+                "
+            ).run(moderate_id);
+            // fetch over the updated moderation:
+            const target = await myDbInstance.getDb().
+            query("SELECT * FROM Moderation WHERE id = ?")
+            .get(moderate_id);
+            return target as IModerate;
+        }catch( error ){
+            console.log( error );
+            return "Can not Update State ";
+        }
+    };
+    static async PublishPost( moderate_id: string):
+    Promise<IModerate|string> {
+        try{
+            await myDbInstance.getDb().prepare(
+                "UPDATE Moderation\
+                SET published = 1\
+                WHERE id = ?\
+                "
+            ).run(moderate_id);
+            // fetch over the updated moderation:
+            const target = await myDbInstance.getDb().
+            query("SELECT * FROM Moderation WHERE id = ?")
+            .get(moderate_id);
+            return target as IModerate;
+        }catch( error ){
+            console.log( error );
+            return "Can not Update State ";
+        }
+    };
+    static async Unpublishpost(moderate_id: string):
+    Promise<IModerate|string> {
+        try{
+            await myDbInstance.getDb().prepare(
+                "UPDATE Moderation\
+                SET published = 0\
+                WHERE id = ?\
+                "
+            ).run(moderate_id);
+            // fetch over the updated moderation:
+            const target = await myDbInstance.getDb().
+            query("SELECT * FROM Moderation WHERE id = ?")
+            .get(moderate_id);
+            return target as IModerate;
+        }catch( error ){
+            console.log( error );
+            return "Can not Update State ";
+        }
+    };
+    static async DeleteModerateById( moderate_id: string): Promise<boolean> {
+        try{
+            await myDbInstance.getDb()
+            .prepare(
+                "DELETE FROM Moderation\
+                WHERE id = ?"
+            ).run(moderate_id);
+            return true;
+        }catch( error ){
+            console.log( error );
+            return false;
+        }
+    };
 }
