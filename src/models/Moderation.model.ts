@@ -106,4 +106,22 @@ export default class ModerateProvider {
             return false;
         }
     };
+    static async getModerateByAuthor( author_id: string ):Promise<string[]>{
+        let id_list: string[] = [];
+        const result = await myDbInstance.getDb()
+        .prepare( "SELECT id FROM Moderation WHERE authorId = ?")
+        .all( author_id );
+        console.log( result );
+        return id_list
+    }
+
+    static async CreateNewModeration(
+        authorId:string,
+        postId:string,
+        improved:boolean,
+        pusblished:boolean
+        ):Promise<any>{
+
+    }
+
 }
