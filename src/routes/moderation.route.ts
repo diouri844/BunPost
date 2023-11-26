@@ -35,10 +35,12 @@ export default class ModerationRoutes {
             PREFIXER+"/:moderate_id",
             ModerateProvider.DeleteModerate
         );
-        this.app.get(PREFIXER+"/author/:authorId",
-            ()=>{}
+        this.app.get(PREFIXER+"/Ban/:authorId",
+            ModerateProvider.BlockAuthor
         );
-        this.app.get(PREFIXER+"/:postId", ()=>{});
+        this.app.post(PREFIXER+"/New/:authorId/:postId", 
+            ModerateProvider.CreateNewModeration
+        );
         return;
     }
 };
