@@ -207,11 +207,18 @@ export default class ModerationController {
             };
         }
         // get the list of moderation belong to the author and make them all not improved and not published:
-        const result:string[] = await ModerateProvider.getModerateByAuthor(authorId);
+        const result:string = await ModerateProvider.BanAuthor(authorId);
         // to completed later :
-        return;
+        return {
+            message: result,
+            dara: authorId
+        };
     }
 
+
+    async HideAuthorPost( context: Context ):Promise<any>{
+        return {};
+    }
 
     async CreateNewModeration( context: Context ): Promise<any>{
         // extract the author and the post id from context params :
@@ -235,15 +242,12 @@ export default class ModerationController {
         const published:boolean = context.body.published||false;
 
         // call static service method:
-        
-        
+        const InsertMessage:string = await ModerateProvider.CreateNewModeration(
+            authorId,postId,improved,published
+        )
         return {
-            postId,
-            authorId,
-            improved,
-            published
-        };
-
+            message:InsertMessage
+        }
     }
 
 
