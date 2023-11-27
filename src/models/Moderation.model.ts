@@ -106,13 +106,39 @@ export default class ModerateProvider {
             return false;
         }
     };
-    static async getModerateByAuthor( author_id: string ):Promise<string[]>{
-        let id_list: string[] = [];
-        const result = await myDbInstance.getDb()
+
+    static async getModerateListByAuthorId(author_id: string):Promise<string[]> {
+        const resultList = await myDbInstance.getDb()
         .prepare( "SELECT id FROM Moderation WHERE authorId = ?")
         .all( author_id );
-        console.log( result );
-        return id_list
+        let IdList: string[] = [];
+        resultList.forEach(
+            (item:any) => IdList.push(item.id)
+        );
+        return IdList;
+    };
+
+    static async BanAuthor( author_id: string ):Promise<string>{
+        const resultList = await ModerateProvider.getModerateListByAuthorId(author_id);
+        let checkResult = 0;
+        await Promise.all(resultList.map(async (id: string) => {
+            const result: IModerate | string = await ModerateProvider.UnimprovePost(id);
+            if (typeof result === "object") {
+              checkResult++;
+            }
+            return id;
+        }));
+        // check the final result :
+        if ( checkResult === resultList.length ){
+            return "Author Baned Successuflly";
+        }
+        return "Error Occured while blocking author "; 
+    }
+
+
+
+    static async HideAuthor( author_id: string):Promise<string> {
+        return "";
     }
 
     static async CreateNewModeration(
@@ -120,8 +146,27 @@ export default class ModerateProvider {
         postId:string,
         improved:boolean,
         pusblished:boolean
-        ):Promise<any>{
-
+        ):Promise<string>{
+        // try to insert the new moderation item : 
+        try{
+            var improvedInsert:number = 0;
+            var publishedInsert:number = 0;
+            if( improved ){
+                improvedInsert = 1;
+            }
+            if( pusblished ){
+                publishedInsert = 1;
+            }
+            await myDbInstance.getDb().prepare(
+                "INSERT INTO Moderation Values (Null,?,?,?,?)"
+            ).run(
+                postId,authorId,improvedInsert,publishedInsert
+            );
+            return "Moderation created successfully";
+        }catch( error ){
+            console.log( error );
+            return "Could not insert moderation item";
+        } 
     }
 
 }
