@@ -39,7 +39,7 @@ export default class ModerationRoutes {
             ModerateProvider.BlockAuthor
         );
         this.app.get(PREFIXER+"/Hide/:authorId",
-            ()=>{}
+            ModerateProvider.HideAuthorPost
         );
         this.app.post(PREFIXER+"/New/:authorId/:postId", 
             ModerateProvider.CreateNewModeration
