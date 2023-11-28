@@ -138,7 +138,21 @@ export default class ModerateProvider {
 
 
     static async HideAuthor( author_id: string):Promise<string> {
-        return "";
+        // get list of moderate id related to the target author :
+        const resultList = await ModerateProvider.getModerateListByAuthorId(author_id);
+        let checkResult = 0;
+        await Promise.all(resultList.map(async (id: string) => {
+            const result: IModerate | string = await ModerateProvider.Unpublishpost(id);
+            if (typeof result === "object") {
+              checkResult++;
+            }
+            return id;
+        }));
+        // check the final result :
+        if ( checkResult === resultList.length ){
+            return "Author content deleted Successfully";
+        }
+        return "Error Occured while deleted author content ";
     }
 
     static async CreateNewModeration(
