@@ -217,7 +217,20 @@ export default class ModerationController {
 
 
     async HideAuthorPost( context: Context ):Promise<any>{
-        return {};
+        //extract the author id from the context params :
+        const { authorId } = context.params;
+        // check if the author is already exists or not :
+        const authorTarget:IAuthor|String = await AuthorProvider.getAuthorById(authorId);
+        if ( typeof authorTarget === 'string'){
+            return {
+                message:"Author not found"
+            };
+        }
+        const result:string = await ModerateProvider.HideAuthor(authorId);
+        return {
+            message: result,
+            dara: authorId
+        };
     }
 
     async CreateNewModeration( context: Context ): Promise<any>{
