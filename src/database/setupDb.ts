@@ -25,6 +25,7 @@ class DatabaseProvider {
       await this.initPost();
       await this.initAuthor();
       await this.initModeration();
+      await this.initComment();
       return;
     }
     async initPost() {
@@ -39,7 +40,7 @@ class DatabaseProvider {
       );
     }
     // add the moderation table :
-    async initModeration(){
+  async initModeration(){
       return this.db.run(
         'CREATE TABLE IF NOT EXISTS "Moderation" (\
           "id"	INTEGER NOT NULL UNIQUE,\
@@ -50,9 +51,9 @@ class DatabaseProvider {
           PRIMARY KEY("id" AUTOINCREMENT)\
         );'
       )
-    };
+  };
 
-    async initAuthor() {
+  async initAuthor() {
       return this.db.run(
         'CREATE TABLE IF NOT EXISTS "Author" (\
           "id"	INTEGER NOT NULL UNIQUE,\
@@ -62,7 +63,22 @@ class DatabaseProvider {
           PRIMARY KEY("id" AUTOINCREMENT)\
         )'
       );
-    }
+  };
+
+  async initComment(){
+    return this.db.run(
+      'CREATE TABLE IF NOT EXISTS  "Comment" (\
+        "id"	INTEGER NOT NULL UNIQUE,\
+        "body"	TEXT NOT NULL,\
+        "at" TEXT NOT NULL,\
+        "parentId" INTEGER,\
+        "postId"	INTEGER NOT NULL,\
+        "authorId" INTEGER NOT NULL,\
+        PRIMARY KEY("id" AUTOINCREMENT)\
+      )'
+    );
+  }
+
 };
 
 // export an instance of the dbProvider : 
