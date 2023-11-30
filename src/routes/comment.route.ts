@@ -21,7 +21,7 @@ export default class CommentRoutes {
         );
         // get comment related to a comment ( replys ):
         this.app.get(
-            PREFIXER+"/:commentId/Replys",
+            PREFIXER+"/Comment/:commentId/Replys",
             ()=>{}
         );
         // add comment :
