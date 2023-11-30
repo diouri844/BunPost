@@ -4,7 +4,7 @@ import { Elysia } from "elysia";
 import setupAuthorRoutes from "./services/author.service";
 import setupPostRoutes from "./services/post.service";
 import setupModerationRoutes from "./services/moderation.service";
-
+import setupCommentRoutes from "./services/comment.service";
 // import db class : 
 import myDbInstance from "./database/setupDb";
 
@@ -16,6 +16,7 @@ const app = new Elysia();
 app.use(setupAuthorRoutes);
 app.use(setupPostRoutes);
 app.use(setupModerationRoutes);
+app.use(setupCommentRoutes);
 
   app.listen("3000",
   async ()=>{
