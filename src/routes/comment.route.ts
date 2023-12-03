@@ -1,4 +1,5 @@
 import { Elysia } from "elysia";
+import CommentController from "../controller/comment.controller";
 
 const  PREFIXER:string = "/api/comment";
 
@@ -14,15 +15,16 @@ export default class CommentRoutes {
         this.setupRoutes();
     };
     private setupRoutes():void{
+        const CommentProvider = new CommentController();
         //get comment related to a post
         this.app.get(
             PREFIXER+"/:postId",
-            ()=>{}
+            CommentProvider.getComments
         );
         // get comment related to a comment ( replys ):
         this.app.get(
             PREFIXER+"/Comment/:commentId/Replys",
-            ()=>{}
+            CommentProvider.getReplys
         );
         // add comment :
         this.app.post(
