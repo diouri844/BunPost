@@ -29,12 +29,12 @@ export default class CommentRoutes {
         // add comment :
         this.app.post(
             PREFIXER+"/:postId",
-            ()=>{}
+            CommentProvider.addComment
         );
         // replaye to a comment :
         this.app.post(
             PREFIXER+"/Reply/:commentId",
-            ()=>{}
+            CommentProvider.replyToComment
         );
         // update a comment by id :
         this.app.put(
