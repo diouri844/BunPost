@@ -90,6 +90,78 @@ export default class CommentController {
                 message:"Comment not found"
             }
         }
+        const authorId:string = context.body!.authorId;
+        const body:string = context.body!.body;
+        // check if authorId and body are valid :
+        if (!authorId || !body ){
+            return {
+                message:"Invalid author id or body "
+            }
+        } 
         // make it done later :
+        const CommentAddResult:string|number = await CommentProvider.addCommentToComment(
+            commentId,authorId,body
+        );
+        if ( typeof CommentAddResult === "string"){
+            return {
+                message: CommentAddResult
+            }
+        }
+        return {
+            message : "Comment added successfully"
+        }
+    }
+    // update comment : only body content :
+    async updateComment( context: Context ):Promise<any>{
+        // extract the comment id from the context params : 
+        const { commentId } = context.params;
+        // check if the comment exists :
+        const target:string|IComment = await CommentProvider.getCommentById(commentId);
+        if ( typeof target === "string"){
+            return {
+                message: target
+            }
+        }
+        // extract the new comment body from the context body :
+        const body:string = context.body?.body;
+        if ( !body ){
+            return {
+                message: "No body was provided"
+            }
+        }
+        const updatedCommentResult:string|IComment = await CommentProvider.updateComment(commentId,body);
+        // check the result :
+        if ( typeof updatedCommentResult === "string"){
+            return {
+                message : updatedCommentResult
+            }
+        }
+        return {
+            message: "Comment updated successfully",
+            data: updatedCommentResult
+        }
+    }
+
+    // delete a comment :
+    async deleteComment ( context: Context ):Promise<any>{
+        // extract the comment id from the context params : 
+        const { commentId } = context.params;
+        // check if the comment exists :
+        const target:string|IComment = await CommentProvider.getCommentById(commentId);
+        if ( typeof target === "string"){
+            return {
+                message: target
+            }
+        }
+        // comment already exists let delete it :
+        const deleteCommentResponse:boolean = await CommentProvider.deleteComment(commentId);
+        if( deleteCommentResponse ){
+            return {
+                message : "Comment deleted successfully"
+            }
+        }
+        return {
+            message: "failed to delete comment"
+        }
     }
 };
