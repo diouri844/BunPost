@@ -39,14 +39,12 @@ export default class CommentRoutes {
         // update a comment by id :
         this.app.put(
             PREFIXER+"/:commentId",
-            ()=>{
-
-            }
+            CommentProvider.updateComment
         );
         // remove a comment by id :
         this.app.delete(
             PREFIXER+"/:commentId",
-            ()=>{}
+            CommentProvider.deleteComment
         );
     };
 };
