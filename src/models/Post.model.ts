@@ -63,7 +63,6 @@ export default class PostProvider {
         );
         return postList;
     };
-
     static async deletePost(postId: string): Promise<boolean> {
         // delete th epost : 
         try{
