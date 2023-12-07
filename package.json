@@ -6,7 +6,10 @@
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
+    "@fastify/jwt": "5.0.0",
+    "@types/fastify-jwt": "^0.8.1",
     "elysia": "^0.7.16",
+    "fastify": "^4.24.3",
     "sequelize": "^6.33.0"
   },
   "devDependencies": {
