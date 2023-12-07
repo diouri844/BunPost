@@ -7,8 +7,10 @@ import setupModerationRoutes from "./services/moderation.service";
 import setupCommentRoutes from "./services/comment.service";
 // import db class : 
 import myDbInstance from "./database/setupDb";
+// import faszify manager :
+import authManger from "./utils/fastify.setup";
 
-const app = new Elysia();
+const app = new Elysia(authManger);
 
 
 // setup Ping tester : 
